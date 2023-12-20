@@ -1,5 +1,6 @@
 {
   "*.ts": [
-    "lint 'src/**' --fix"
+    "npm run lint 'src/**' --fix",
+    "npm run test 'src/**' --fix"
   ]
 }
