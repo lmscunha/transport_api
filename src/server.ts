@@ -8,6 +8,8 @@ const app = express();
 app.use(express.json());
 app.use(routes);
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
+
+export { app, server };
