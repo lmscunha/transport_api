@@ -18,7 +18,6 @@ automobilesRouter.post("/", async (req, res) => {
     (auto) => auto.licensePlate == automobile.licensePlate,
   );
   const result = autoCreated[0];
-
   return res.status(201).json({ result });
 });
 
