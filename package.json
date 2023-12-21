@@ -31,8 +31,8 @@
   },
   "lint-staged": {
     "*.ts": [
-      "npm run lint 'src/**' --fix",
-      "npm run test 'src/**' --fix"
+      "npm run lint 'src/**'",
+      "npm run test 'src/**'"
     ]
   }
 }
