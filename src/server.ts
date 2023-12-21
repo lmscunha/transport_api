@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 // app.use(routes);
 app.get("/", (req, res) => {
-  res.send("Welcome to transportation API!");
+  res.send("Welcome to transport API!");
 });
 
 app.listen(port, () => {
