@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "prettier --write",
     "test": "jest --passWithNoTests",
-    "start": "nodemon src/server.ts"
+    "start": "nodemon src/server.ts",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "",
