@@ -1,6 +1,9 @@
 import { Router } from "express";
 
+import automobilesRouter from "./automobiles.router";
+
 const routes = Router();
+routes.use("/automobiles", automobilesRouter);
 
 routes.use("/", async (req, res) => {
   try {
