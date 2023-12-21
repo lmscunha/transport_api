@@ -28,5 +28,11 @@
   },
   "dependencies": {
     "express": "^4.18.2"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "npm run lint 'src/**' --fix",
+      "npm run test 'src/**' --fix"
+    ]
   }
 }
