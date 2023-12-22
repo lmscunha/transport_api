@@ -11,6 +11,15 @@ type Automobile = {
 const db: Automobile[] = [];
 
 export default class AutomobileController {
+  public async load(req: Request, res: Response): Promise<Response> {
+    const { id } = req.params;
+
+    const autoCreated = db.filter((auto) => auto.id == id);
+    const result = autoCreated[0];
+
+    return res.status(200).json({ result });
+  }
+
   public async create(req: Request, res: Response): Promise<Response> {
     const { automobile } = req.body;
     const id = uuidv4();
