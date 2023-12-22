@@ -11,6 +11,12 @@ type Automobile = {
 let db: Automobile[] = [];
 
 export default class AutomobileController {
+  public async list(req: Request, res: Response): Promise<Response> {
+    const automobiles = db;
+    console.log(" MY AUTOMOBIELS", automobiles);
+    return res.status(200).json({ automobiles });
+  }
+
   public async load(req: Request, res: Response): Promise<Response> {
     const { id } = req.params;
 
