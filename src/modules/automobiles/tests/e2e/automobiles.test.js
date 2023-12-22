@@ -111,4 +111,34 @@ describe("Automobiles Resource", () => {
       expect(res.body.automobile.brand).toEqual("Foo");
     });
   });
+
+  describe("DELETE /automobiles", () => {
+    test("should remove the automobile by ID", async () => {
+      const autoCreated = await request(app).post("/automobiles").send({
+        licensePlate: "ABC",
+        color: "Red",
+        brand: "Foo",
+      });
+
+      const autoId = autoCreated.body.automobile.id;
+      const res = await request(app).delete(`/automobiles/${autoId}`);
+
+      expect(res.statusCode).toBe(204);
+    });
+
+    test("should not featch a deleted automobile", async () => {
+      const autoCreated = await request(app).post("/automobiles").send({
+        licensePlate: "ABC",
+        color: "Red",
+        brand: "Foo",
+      });
+
+      const autoId = autoCreated.body.automobile.id;
+      await request(app).delete(`/automobiles/${autoId}`);
+      const res = await request(app).get(`/automobiles/${autoId}`);
+
+      expect(res.statusCode).toBe(404);
+      expect(res.body.message).toEqual("Automobile not found.");
+    });
+  });
 });
