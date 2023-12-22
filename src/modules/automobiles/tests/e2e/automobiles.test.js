@@ -75,6 +75,70 @@ describe("Automobiles Resource", () => {
       expect(res.body.automobiles[1].color).toEqual(color);
     });
 
+    test("should filter the automobiles by brand", async () => {
+      await request(app).post("/automobiles").send({
+        licensePlate: "ABC1",
+        color: "Purple",
+        brand: "Foo1",
+      });
+
+      const autoCreated2 = await request(app).post("/automobiles").send({
+        licensePlate: "ABC2",
+        color: "Purple",
+        brand: "Baa2",
+      });
+
+      await request(app).post("/automobiles").send({
+        licensePlate: "ABC3",
+        color: "Yellow",
+        brand: "Foo Baa",
+      });
+
+      const brand = "Baa2";
+      const res = await request(app).get(`/automobiles?brand=${brand}`);
+
+      expect(res.statusCode).toBe(200);
+      expect(res.body.automobiles.length).toEqual(1);
+      expect(res.body.automobiles[0].id).toEqual(
+        autoCreated2.body.automobile.id,
+      );
+      expect(res.body.automobiles[0].brand).toEqual(brand);
+    });
+
+    test("should filter the automobiles by color and brand", async () => {
+      await request(app).post("/automobiles").send({
+        licensePlate: "ABC1",
+        color: "Purple",
+        brand: "Foo1",
+      });
+
+      const autoCreated2 = await request(app).post("/automobiles").send({
+        licensePlate: "ABC3",
+        color: "Purple1",
+        brand: "Baa3",
+      });
+
+      await request(app).post("/automobiles").send({
+        licensePlate: "ABC3",
+        color: "Yellow",
+        brand: "Foo Baa",
+      });
+
+      const color = "Purple1";
+      const brand = "Baa3";
+      const res = await request(app).get(
+        `/automobiles?color=${color}&brand=${brand}`,
+      );
+
+      expect(res.statusCode).toBe(200);
+      expect(res.body.automobiles.length).toEqual(1);
+      expect(res.body.automobiles[0].id).toEqual(
+        autoCreated2.body.automobile.id,
+      );
+      expect(res.body.automobiles[0].color).toEqual(color);
+      expect(res.body.automobiles[0].brand).toEqual(brand);
+    });
+
     test("should get the automobile with license plate ABC by ID", async () => {
       const autoCreated = await request(app).post("/automobiles").send({
         licensePlate: "ABC",
