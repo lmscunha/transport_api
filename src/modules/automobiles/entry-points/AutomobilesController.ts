@@ -11,6 +11,21 @@ type Automobile = {
 let db: Automobile[] = [];
 
 export default class AutomobileController {
+  public async list(req: Request, res: Response): Promise<Response> {
+    const { color, brand } = req.query;
+    let automobiles = db;
+    if (!color && !brand) {
+      return res.status(200).json({ automobiles });
+    }
+
+    for (const property in req.query) {
+      automobiles = automobiles.filter(
+        (auto) => auto[property as keyof Automobile] == req.query[property],
+      );
+    }
+    return res.status(200).json({ automobiles });
+  }
+
   public async load(req: Request, res: Response): Promise<Response> {
     const { id } = req.params;
 
