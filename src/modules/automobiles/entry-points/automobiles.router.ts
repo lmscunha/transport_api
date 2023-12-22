@@ -1,24 +1,10 @@
 import { Router } from "express";
 
+import AutomobileController from "./AutomobilesController";
+
 const automobilesRouter = Router();
+const automobileController = new AutomobileController();
 
-type Automobile = {
-  licensePlate: String;
-  color: String;
-  brand: String;
-};
-
-const db: Automobile[] = [];
-
-automobilesRouter.post("/", async (req, res) => {
-  const { automobile } = req.body;
-
-  db.push(automobile);
-  const autoCreated = db.filter(
-    (auto) => auto.licensePlate == automobile.licensePlate,
-  );
-  const result = autoCreated[0];
-  return res.status(201).json({ result });
-});
+automobilesRouter.post("/", automobileController.create);
 
 export default automobilesRouter;
