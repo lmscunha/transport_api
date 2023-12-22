@@ -41,6 +41,40 @@ describe("Automobiles Resource", () => {
       );
     });
 
+    test("should filter the automobiles by color", async () => {
+      const autoCreated1 = await request(app).post("/automobiles").send({
+        licensePlate: "ABC1",
+        color: "Purple",
+        brand: "Foo",
+      });
+
+      const autoCreated2 = await request(app).post("/automobiles").send({
+        licensePlate: "ABC2",
+        color: "Purple",
+        brand: "Baa",
+      });
+
+      await request(app).post("/automobiles").send({
+        licensePlate: "ABC3",
+        color: "Yellow",
+        brand: "Foo Baa",
+      });
+
+      const color = "Purple";
+      const res = await request(app).get(`/automobiles?color=${color}`);
+
+      expect(res.statusCode).toBe(200);
+      expect(res.body.automobiles.length).toEqual(2);
+      expect(res.body.automobiles[0].id).toEqual(
+        autoCreated1.body.automobile.id,
+      );
+      expect(res.body.automobiles[1].id).toEqual(
+        autoCreated2.body.automobile.id,
+      );
+      expect(res.body.automobiles[0].color).toEqual(color);
+      expect(res.body.automobiles[1].color).toEqual(color);
+    });
+
     test("should get the automobile with license plate ABC by ID", async () => {
       const autoCreated = await request(app).post("/automobiles").send({
         licensePlate: "ABC",
