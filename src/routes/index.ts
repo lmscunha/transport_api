@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import automobilesRouter from "../modules/automobiles/routes/automobiles.router";
+import automobilesRouter from "../modules/automobiles/entry-points/automobiles.router";
 
 const routes = Router();
 routes.use("/automobiles", automobilesRouter);
