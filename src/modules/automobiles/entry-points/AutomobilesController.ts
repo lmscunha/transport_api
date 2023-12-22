@@ -12,8 +12,14 @@ let db: Automobile[] = [];
 
 export default class AutomobileController {
   public async list(req: Request, res: Response): Promise<Response> {
-    const automobiles = db;
-    console.log(" MY AUTOMOBIELS", automobiles);
+    const { color } = req.query;
+    let automobiles = [];
+    if (!color) {
+      automobiles = db;
+      return res.status(200).json({ automobiles });
+    }
+
+    automobiles = db.filter((auto) => auto.color == color);
     return res.status(200).json({ automobiles });
   }
 
