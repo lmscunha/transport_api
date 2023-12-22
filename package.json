@@ -6,6 +6,7 @@
   "scripts": {
     "lint": "prettier --write",
     "test": "jest --passWithNoTests",
+    "test:ci": "npm test -- --coverage",
     "start": "nodemon src/server.ts",
     "prepare": "husky install"
   },
