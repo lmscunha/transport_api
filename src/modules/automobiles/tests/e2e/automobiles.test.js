@@ -8,83 +8,67 @@ describe("Automobiles Resource", () => {
 
   describe("POST /automobiles", () => {
     test("should register automobile with license plate ABC", async () => {
-      const res = await request(app)
-        .post("/automobiles")
-        .send({
-          automobile: {
-            licensePlate: "ABC",
-            color: "Green",
-            brand: "Foo",
-          },
-        });
+      const res = await request(app).post("/automobiles").send({
+        licensePlate: "ABC",
+        color: "Green",
+        brand: "Foo",
+      });
 
       expect(res.statusCode).toBe(201);
-      expect(res.body.result).toHaveProperty("id");
-      expect(res.body.result.licensePlate).toEqual("ABC");
-      expect(res.body.result.color).toEqual("Green");
-      expect(res.body.result.brand).toEqual("Foo");
+      expect(res.body.automobile).toHaveProperty("id");
+      expect(res.body.automobile.licensePlate).toEqual("ABC");
+      expect(res.body.automobile.color).toEqual("Green");
+      expect(res.body.automobile.brand).toEqual("Foo");
     });
 
     test("should register automobile with license plate XYZ", async () => {
-      const res = await request(app)
-        .post("/automobiles")
-        .send({
-          automobile: {
-            licensePlate: "XYZ",
-            color: "Blue",
-            brand: "Baa",
-          },
-        });
+      const res = await request(app).post("/automobiles").send({
+        licensePlate: "XYZ",
+        color: "Blue",
+        brand: "Baa",
+      });
 
       expect(res.statusCode).toBe(201);
-      expect(res.body.result).toHaveProperty("id");
-      expect(res.body.result.licensePlate).toEqual("XYZ");
-      expect(res.body.result.color).toEqual("Blue");
-      expect(res.body.result.brand).toEqual("Baa");
+      expect(res.body.automobile).toHaveProperty("id");
+      expect(res.body.automobile.licensePlate).toEqual("XYZ");
+      expect(res.body.automobile.color).toEqual("Blue");
+      expect(res.body.automobile.brand).toEqual("Baa");
     });
   });
 
   describe("GET by ID /automobiles", () => {
     test("should get the automobile with license plate ABC by ID", async () => {
-      const autoCreated = await request(app)
-        .post("/automobiles")
-        .send({
-          automobile: {
-            licensePlate: "ABC",
-            color: "Red",
-            brand: "Foo",
-          },
-        });
+      const autoCreated = await request(app).post("/automobiles").send({
+        licensePlate: "ABC",
+        color: "Red",
+        brand: "Foo",
+      });
 
-      const autoId = autoCreated.body.result.id;
+      const autoId = autoCreated.body.automobile.id;
       const res = await request(app).get(`/automobiles/${autoId}`);
 
       expect(res.statusCode).toBe(200);
-      expect(res.body.result.id).toEqual(autoId);
-      expect(res.body.result.licensePlate).toEqual("ABC");
-      expect(res.body.result.color).toEqual("Red");
-      expect(res.body.result.brand).toEqual("Foo");
+      expect(res.body.automobile.id).toEqual(autoId);
+      expect(res.body.automobile.licensePlate).toEqual("ABC");
+      expect(res.body.automobile.color).toEqual("Red");
+      expect(res.body.automobile.brand).toEqual("Foo");
     });
 
     test("should get the automobile with license plate XYZ by ID", async () => {
-      const autoCreated = await request(app)
-        .post("/automobiles")
-        .send({
-          automobile: {
-            licensePlate: "XYZ",
-            color: "Yellow",
-            brand: "Foo",
-          },
-        });
+      const autoCreated = await request(app).post("/automobiles").send({
+        licensePlate: "XYZ",
+        color: "Yellow",
+        brand: "Foo",
+      });
 
-      const autoId = autoCreated.body.result.id;
+      const autoId = autoCreated.body.automobile.id;
       const res = await request(app).get(`/automobiles/${autoId}`);
 
       expect(res.statusCode).toBe(200);
-      expect(res.body.result.id).toEqual(autoId);
-      expect(res.body.result.licensePlate).toEqual("XYZ");
-      expect(res.body.result.color).toEqual("Yellow");
-      expect(res.body.result.brand).toEqual("Foo");
+      expect(res.body.automobile.id).toEqual(autoId);
+      expect(res.body.automobile.licensePlate).toEqual("XYZ");
+      expect(res.body.automobile.color).toEqual("Yellow");
+      expect(res.body.automobile.brand).toEqual("Foo");
     });
   });
 });
