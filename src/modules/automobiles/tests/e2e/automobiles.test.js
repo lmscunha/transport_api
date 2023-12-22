@@ -19,6 +19,7 @@ describe("Automobiles Resource", () => {
         });
 
       expect(res.statusCode).toBe(201);
+      expect(res.body.result).toHaveProperty("id");
       expect(res.body.result.licensePlate).toEqual("ABC");
       expect(res.body.result.color).toEqual("Green");
       expect(res.body.result.brand).toEqual("Foo");
@@ -36,6 +37,7 @@ describe("Automobiles Resource", () => {
         });
 
       expect(res.statusCode).toBe(201);
+      expect(res.body.result).toHaveProperty("id");
       expect(res.body.result.licensePlate).toEqual("XYZ");
       expect(res.body.result.color).toEqual("Blue");
       expect(res.body.result.brand).toEqual("Baa");
