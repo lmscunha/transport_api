@@ -71,4 +71,44 @@ describe("Automobiles Resource", () => {
       expect(res.body.automobile.brand).toEqual("Foo");
     });
   });
+
+  describe("PUT /automobiles", () => {
+    test("should update the automobile color", async () => {
+      const autoCreated = await request(app).post("/automobiles").send({
+        licensePlate: "ABC",
+        color: "Red",
+        brand: "Foo",
+      });
+
+      const autoId = autoCreated.body.automobile.id;
+      const res = await request(app).put(`/automobiles/${autoId}`).send({
+        color: "Blue",
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.body.automobile.id).toEqual(autoId);
+      expect(res.body.automobile.licensePlate).toEqual("ABC");
+      expect(res.body.automobile.color).toEqual("Blue");
+      expect(res.body.automobile.brand).toEqual("Foo");
+    });
+
+    test("should update the automobile licensePlate", async () => {
+      const autoCreated = await request(app).post("/automobiles").send({
+        licensePlate: "ABC",
+        color: "Red",
+        brand: "Foo",
+      });
+
+      const autoId = autoCreated.body.automobile.id;
+      const res = await request(app).put(`/automobiles/${autoId}`).send({
+        licensePlate: "XYZ",
+      });
+
+      expect(res.statusCode).toBe(200);
+      expect(res.body.automobile.id).toEqual(autoId);
+      expect(res.body.automobile.licensePlate).toEqual("XYZ");
+      expect(res.body.automobile.color).toEqual("Red");
+      expect(res.body.automobile.brand).toEqual("Foo");
+    });
+  });
 });

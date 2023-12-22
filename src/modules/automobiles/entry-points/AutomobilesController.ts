@@ -30,4 +30,20 @@ export default class AutomobileController {
     const automobile = autoCreated[0];
     return res.status(201).json({ automobile });
   }
+
+  public async update(req: Request, res: Response): Promise<Response> {
+    const { id } = req.params;
+    const body = req.body;
+
+    const auto = db.filter((auto) => auto.id == id);
+
+    const automobile = auto[0];
+    for (const property in body) {
+      if (automobile[property as keyof Automobile]) {
+        automobile[property as keyof Automobile] =
+          body[property as keyof Automobile];
+      }
+    }
+    return res.status(200).json({ automobile });
+  }
 }
