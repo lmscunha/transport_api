@@ -14,23 +14,20 @@ export default class AutomobileController {
   public async load(req: Request, res: Response): Promise<Response> {
     const { id } = req.params;
 
-    const autoCreated = db.filter((auto) => auto.id == id);
-    const result = autoCreated[0];
+    const auto = db.filter((auto) => auto.id == id);
 
-    return res.status(200).json({ result });
+    const automobile = auto[0];
+    return res.status(200).json({ automobile });
   }
 
   public async create(req: Request, res: Response): Promise<Response> {
-    const { automobile } = req.body;
+    const { licensePlate, color, brand } = req.body;
     const id = uuidv4();
 
-    automobile.id = id;
-    db.push(automobile);
-
+    db.push({ id, licensePlate, color, brand });
     const autoCreated = db.filter((auto) => auto.id == id);
 
-    const result = autoCreated[0];
-
-    return res.status(201).json({ result });
+    const automobile = autoCreated[0];
+    return res.status(201).json({ automobile });
   }
 }
