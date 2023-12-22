@@ -12,14 +12,17 @@ let db: Automobile[] = [];
 
 export default class AutomobileController {
   public async list(req: Request, res: Response): Promise<Response> {
-    const { color } = req.query;
-    let automobiles = [];
-    if (!color) {
-      automobiles = db;
+    const { color, brand } = req.query;
+    let automobiles = db;
+    if (!color && !brand) {
       return res.status(200).json({ automobiles });
     }
 
-    automobiles = db.filter((auto) => auto.color == color);
+    for (const property in req.query) {
+      automobiles = automobiles.filter(
+        (auto) => auto[property as keyof Automobile] == req.query[property],
+      );
+    }
     return res.status(200).json({ automobiles });
   }
 
