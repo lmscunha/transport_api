@@ -8,13 +8,16 @@ type Automobile = {
   brand: String;
 };
 
-const db: Automobile[] = [];
+let db: Automobile[] = [];
 
 export default class AutomobileController {
   public async load(req: Request, res: Response): Promise<Response> {
     const { id } = req.params;
 
     const auto = db.filter((auto) => auto.id == id);
+    if (auto.length < 1) {
+      return res.status(404).json({ message: "Automobile not found." });
+    }
 
     const automobile = auto[0];
     return res.status(200).json({ automobile });
@@ -45,5 +48,14 @@ export default class AutomobileController {
       }
     }
     return res.status(200).json({ automobile });
+  }
+
+  public async delete(req: Request, res: Response): Promise<Response> {
+    const { id } = req.params;
+
+    const newDB = db.filter((auto) => auto.id !== id);
+
+    db = newDB;
+    return res.status(204).json();
   }
 }
