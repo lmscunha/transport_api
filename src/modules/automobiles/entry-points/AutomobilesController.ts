@@ -1,51 +1,37 @@
 import { Request, Response } from "express";
-import { v4 as uuidv4 } from "uuid";
 
-type Automobile = {
-  id: String;
-  licensePlate: String;
-  color: String;
-  brand: String;
-};
+import { AutomobileService } from "../domain/automobile-service";
+import { AutomobileRepository } from "../data-access/automobile-repository";
 
-let db: Automobile[] = [];
+const automobileService = new AutomobileService(new AutomobileRepository());
 
 export default class AutomobileController {
   public async list(req: Request, res: Response): Promise<Response> {
-    const { color, brand } = req.query;
-    let automobiles = db;
-    if (!color && !brand) {
-      return res.status(200).json({ automobiles });
-    }
+    const query = req.query;
+    let automobiles = await automobileService.getAllAutomobiles(query);
 
-    for (const property in req.query) {
-      automobiles = automobiles.filter(
-        (auto) => auto[property as keyof Automobile] == req.query[property],
-      );
-    }
     return res.status(200).json({ automobiles });
   }
 
   public async load(req: Request, res: Response): Promise<Response> {
     const { id } = req.params;
 
-    const auto = db.filter((auto) => auto.id == id);
-    if (auto.length < 1) {
+    const automobile = await automobileService.getAnAutomobile(id);
+    if (!automobile) {
       return res.status(404).json({ message: "Automobile not found." });
     }
 
-    const automobile = auto[0];
     return res.status(200).json({ automobile });
   }
 
   public async create(req: Request, res: Response): Promise<Response> {
     const { licensePlate, color, brand } = req.body;
-    const id = uuidv4();
 
-    db.push({ id, licensePlate, color, brand });
-    const autoCreated = db.filter((auto) => auto.id == id);
-
-    const automobile = autoCreated[0];
+    const automobile = await automobileService.registerAutomobile({
+      licensePlate,
+      color,
+      brand,
+    });
     return res.status(201).json({ automobile });
   }
 
@@ -53,24 +39,15 @@ export default class AutomobileController {
     const { id } = req.params;
     const body = req.body;
 
-    const auto = db.filter((auto) => auto.id == id);
-
-    const automobile = auto[0];
-    for (const property in body) {
-      if (automobile[property as keyof Automobile]) {
-        automobile[property as keyof Automobile] =
-          body[property as keyof Automobile];
-      }
-    }
+    const automobile = await automobileService.updateAutomobile(id, body);
     return res.status(200).json({ automobile });
   }
 
   public async delete(req: Request, res: Response): Promise<Response> {
     const { id } = req.params;
 
-    const newDB = db.filter((auto) => auto.id !== id);
+    await automobileService.deleteAutomobile(id);
 
-    db = newDB;
     return res.status(204).json();
   }
 }
