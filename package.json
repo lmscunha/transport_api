@@ -10,8 +10,8 @@
     "test:integration": "npm test -- --watch -c jest.integration.config.js",
     "test:ci": "npm test -- --coverage",
     "test:staged": "npm test -- --findRelatedTests",
-    "dev": "nodemon src/server.ts",
-    "start": "node dist/src/server.js",
+    "dev": "nodemon index.ts",
+    "start": "node dist/index.js",
     "build": "rimraf dist && tsc",
     "prepare": "husky install"
   },
