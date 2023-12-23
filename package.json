@@ -6,8 +6,13 @@
   "scripts": {
     "lint": "prettier --write",
     "test": "jest --passWithNoTests",
+    "test:unit": "npm test -- --watch -c jest.unit.config.js",
+    "test:integration": "npm test -- --watch -c jest.integration.config.js",
     "test:ci": "npm test -- --coverage",
-    "start": "nodemon src/server.ts",
+    "test:staged": "npm test -- --findRelatedTests",
+    "dev": "nodemon src/server.ts",
+    "start": "node dist/src/server.js",
+    "build": "rimraf dist && tsc",
     "prepare": "husky install"
   },
   "keywords": [],
@@ -24,6 +29,7 @@
     "lint-staged": "^15.2.0",
     "nodemon": "^3.0.2",
     "prettier": "3.1.1",
+    "rimraf": "^5.0.5",
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.1",
     "ts-node": "^10.9.2",
@@ -37,7 +43,7 @@
   "lint-staged": {
     "*.ts": [
       "npm run lint 'src/**'",
-      "npm run test 'src/**'"
+      "npm run test:staged 'src/**'"
     ]
   }
 }

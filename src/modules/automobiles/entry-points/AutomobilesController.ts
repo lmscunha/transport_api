@@ -8,39 +8,49 @@ const automobileService = new AutomobileService(new AutomobileRepository());
 export default class AutomobileController {
   public async list(req: Request, res: Response): Promise<Response> {
     const query = req.query;
-    let automobiles = await automobileService.getAllAutomobiles(query);
+    let data = await automobileService.getAllAutomobiles(query);
 
-    return res.status(200).json({ automobiles });
+    return res.status(200).json({ data });
   }
 
   public async load(req: Request, res: Response): Promise<Response> {
     const { id } = req.params;
 
-    const automobile = await automobileService.getAnAutomobile(id);
-    if (!automobile) {
-      return res.status(404).json({ message: "Automobile not found." });
+    const data = await automobileService.getAnAutomobile(id);
+    if (!data.ok) {
+      return res.status(Number(data.status)).json({ message: data.why });
     }
 
-    return res.status(200).json({ automobile });
+    return res.status(200).json({ data });
   }
 
   public async create(req: Request, res: Response): Promise<Response> {
     const { licensePlate, color, brand } = req.body;
 
-    const automobile = await automobileService.registerAutomobile({
+    const data = await automobileService.registerAutomobile({
       licensePlate,
       color,
       brand,
     });
-    return res.status(201).json({ automobile });
+
+    if (!data.ok) {
+      return res.status(Number(data.status)).json({ message: data.why });
+    }
+
+    return res.status(201).json({ data });
   }
 
   public async update(req: Request, res: Response): Promise<Response> {
     const { id } = req.params;
     const body = req.body;
 
-    const automobile = await automobileService.updateAutomobile(id, body);
-    return res.status(200).json({ automobile });
+    const data = await automobileService.updateAutomobile(id, body);
+
+    if (!data.ok) {
+      return res.status(Number(data.status)).json({ message: data.why });
+    }
+
+    return res.status(200).json({ data });
   }
 
   public async delete(req: Request, res: Response): Promise<Response> {

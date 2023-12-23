@@ -6,7 +6,7 @@ import { FilterDTO, InputDTO, StorageDTO } from "../domain/automobile-dtos";
 
 let db: Automobile[] = [];
 
-export class AutomobileRepository implements AutomobileProvider {
+export class AutomobileRepositoryFaker implements AutomobileProvider {
   public async getAll(): Promise<Automobile[] | []> {
     const automobiles = db;
     return automobiles;
@@ -15,6 +15,17 @@ export class AutomobileRepository implements AutomobileProvider {
   public async getById(id: string): Promise<Automobile> {
     let automobile = db.filter((auto) => auto.id === id);
     return automobile[0];
+  }
+
+  public async isValidPlate(licensePlate: string): Promise<boolean> {
+    let result = false;
+    let automobile = db.filter((auto) => auto.licensePlate === licensePlate);
+
+    if (automobile.length === 0) {
+      result = true;
+    }
+
+    return result;
   }
 
   public async filterBy(params: FilterDTO): Promise<Automobile[] | []> {
@@ -28,17 +39,6 @@ export class AutomobileRepository implements AutomobileProvider {
       );
     }
     return automobiles;
-  }
-
-  public async isValidPlate(licensePlate: string): Promise<boolean> {
-    let result = false;
-    let automobile = db.filter((auto) => auto.licensePlate === licensePlate);
-
-    if (automobile.length === 0) {
-      result = true;
-    }
-
-    return result;
   }
 
   public async save(automobile: StorageDTO): Promise<Automobile> {
@@ -69,5 +69,9 @@ export class AutomobileRepository implements AutomobileProvider {
   public async delete(id: string): Promise<void> {
     const newDB = db.filter((auto) => auto.id !== id);
     db = newDB;
+  }
+
+  public async reset(): Promise<void> {
+    db = [];
   }
 }
