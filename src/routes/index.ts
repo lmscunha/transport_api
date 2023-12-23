@@ -6,13 +6,7 @@ const routes = Router();
 routes.use("/automobiles", automobilesRouter);
 
 routes.use("/", async (req, res) => {
-  try {
-    res.status(200).send("Welcome to Transport API.");
-  } catch (error) {
-    res
-      .status(500)
-      .json({ error: "Something went wrong. Please return later." });
-  }
+  res.status(200).json({ message: "Welcome to Transport API." });
 });
 
 export default routes;
