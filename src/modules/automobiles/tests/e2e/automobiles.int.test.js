@@ -1,11 +1,7 @@
 const request = require("supertest");
-const { app, server } = require("../../../../server");
+const { app } = require("../../../../server");
 
 describe("Automobiles Resource", () => {
-  afterAll(() => {
-    server.close();
-  });
-
   describe("GET /automobiles", () => {
     test("should list all automobiles", async () => {
       const autoCreated1 = await request(app).post("/automobiles").send({
