@@ -214,6 +214,45 @@ describe("AutomobileUsageService", () => {
         },
       });
     });
+
+    test("should not register bad input", async () => {
+      const driver = await driverRepositoryFaker.save({
+        name: "John",
+      });
+
+      const automobile = await automobileRepositoryFaker.save({
+        licensePlate: "AAA1A11",
+        brand: "Foo",
+        color: "Blue",
+      });
+
+      const result = await automobileUsageService.registerAutomobileUsage({
+        startDate: "11/12/23",
+        driverId: driver.id,
+        automobileId: automobile.id,
+        reason: "Test",
+        foo: "Bad input"
+      });
+
+      expect(result).toEqual({
+        ok: true,
+        automobileUsage: {
+          startDate: "11/12/23",
+          driver: {
+            id: driver.id,
+            name: "John",
+          },
+          automobile: {
+            id: automobile.id,
+            licensePlate: "AAA1A11",
+            brand: "Foo",
+            color: "Blue",
+          },
+          id: result.automobileUsage.id,
+          reason: "Test",
+        },
+      });
+    });
   });
 
   describe("updateDriver", () => {
@@ -263,7 +302,7 @@ describe("AutomobileUsageService", () => {
       });
     });
 
-    test("should return {ok:false, why:no-data-to-update} if there is no data to update", async () => {
+    test("should not update if there is no data to update", async () => {
       const driver = await driverRepositoryFaker.save({
         name: "John",
       });
@@ -288,7 +327,7 @@ describe("AutomobileUsageService", () => {
 
       expect(result).toEqual({
         ok: false,
-        why: "no-data-to-update",
+        why: "invalid-data-to-update",
         status: 403,
       });
     });
@@ -350,6 +389,38 @@ describe("AutomobileUsageService", () => {
       expect(result).toEqual({
         ok: false,
         why: "no-invalid-end-date",
+        status: 403,
+      });
+    });
+
+    test("should not update bad input", async () => {
+      const driver = await driverRepositoryFaker.save({
+        name: "John",
+      });
+
+      const automobile = await automobileRepositoryFaker.save({
+        licensePlate: "AAA1A11",
+        brand: "Foo",
+        color: "Blue",
+      });
+
+      const autoUsage = await automobileUsageService.registerAutomobileUsage({
+        startDate: "11/12/23",
+        driverId: driver.id,
+        automobileId: automobile.id,
+        reason: "Test",
+      });
+
+      const result = await automobileUsageService.updateAutomobileUsage(
+        autoUsage.automobileUsage.id,
+        {
+          foo: "Test",
+        },
+      );
+
+      expect(result).toEqual({
+        ok: false,
+        why: "invalid-data-to-update",
         status: 403,
       });
     });

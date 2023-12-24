@@ -68,14 +68,15 @@ export class AutomobileUsageService implements AutomobileUsageUseCases {
     id: string,
     newData: UpdateDTO,
   ): Promise<ResultDTO> {
-    if (Object.keys(newData).length < 1) {
-      return { ok: false, why: "no-data-to-update", status: 403 };
+    const { endDate } = newData;
+
+    if (!endDate) {
+      return { ok: false, why: "invalid-data-to-update", status: 403 };
     }
 
-    const automobileUsage = await this.automobileUageProvider.update(
-      id,
-      newData,
-    );
+    const automobileUsage = await this.automobileUageProvider.update(id, {
+      endDate,
+    });
 
     if (automobileUsage === null) {
       return {
