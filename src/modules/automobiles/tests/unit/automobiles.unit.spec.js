@@ -167,10 +167,10 @@ describe("AutomobileService", () => {
         licensePlate: "AAA1A11",
         brand: "Foo",
         color: "Blue",
-        foo: "Bad"
+        foo: "Bad",
       });
 
-      expect(result.automobile).not.toHaveProperty("foo")
+      expect(result.automobile).not.toHaveProperty("foo");
     });
 
     test("should return {ok:false, why:invalid-automobile-data} if all data is missing", async () => {
@@ -310,11 +310,11 @@ describe("AutomobileService", () => {
         auto.automobile.id,
         {
           color: "Red",
-          foo: "Bad"
+          foo: "Bad",
         },
       );
 
-      expect(result.automobile).not.toHaveProperty("foo")
+      expect(result.automobile).not.toHaveProperty("foo");
     });
 
     test("should return {ok:false, why:no-automobile-found} if there is no automobile with that id", async () => {

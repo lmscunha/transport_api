@@ -162,7 +162,7 @@ describe("usages Resource", () => {
         "BBA1A22",
       );
     });
-  })
+  });
 
   describe("PUT /usages", () => {
     test("should add automobile-usage endDate", async () => {
