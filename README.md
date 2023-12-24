@@ -9,7 +9,6 @@ A web server where you can register your automobiles, drivers and automobile usa
 
 ![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/lmscunha/transport_api/node.js.yml)
 
-
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 
 
@@ -35,6 +34,39 @@ To start the server in development mode, run the following cmd:
 Then you should see a message similar to:
 ```bash
   Server listening on port 3333
+```
+To  build the server for production, run the following cmd:
+```bash
+  npm run build
+```
+To start the server on production mode run:
+```bash
+  npm run start
+```
+## Tests
+
+You can run the following types of automatic tests:
+- Unit
+- Integration
+
+### To execute the unit tests, run:
+
+```bash
+  npm run test:unit 
+
+```
+### To execute the integration tests (e2e), run:
+
+```bash
+  npm run test:integration
+
+```
+
+### To run all tests and see its coverage, run:
+
+```bash
+  npm run test:ci
+
 ```
 ## API Reference
 
@@ -372,6 +404,160 @@ No body
 
 ```json
 No body - Status 204
+````
+
+
+## Automobile Usages
+### Get all usages
+
+```http
+  GET /usages
+```
+
+#### Request Example:
+
+```json
+No body
+````
+
+#### Response Example:
+
+```json
+{
+	"data": {
+		"ok": true,
+		"automobileUsage": [
+			{
+				"id": "9faa8905-1d50-4f03-8811-96e4e3b9b9b5",
+				"startDate": "11/12/23",
+				"driver": {
+					"id": "02d542d5-cd94-421f-9ac2-0842fe8f855a",
+					"name": "Paul"
+				},
+				"automobile": {
+					"id": "19a28d9c-9553-4c87-b208-53acaa05af0c",
+					"licensePlate": "AAA1A12",
+					"color": "Green",
+					"brand": "Toyota"
+				},
+				"reason": "Merchandise transport"
+			},
+			{
+				"id": "356b270b-36db-415a-a809-88a9323605d2",
+				"startDate": "12/12/23",
+				"driver": {
+					"id": "d460736f-e98c-4d37-bb8c-75a0acd47a64",
+					"name": "John"
+				},
+				"automobile": {
+					"id": "2ef73fc1-f781-49b3-8943-7282b5984065",
+					"licensePlate": "AAA1A13",
+					"color": "Green",
+					"brand": "Toyota"
+				},
+				"reason": "Merchandise transport"
+			}
+		]
+	}
+}
+````
+
+### Register a automobile usage
+
+```http
+  POST /usages
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `startDate`      | `string` | **Required**. Start the use of the automobile |
+| `driverId`      | `string` | **Required**. Driver ID using the automobile|
+| `automobileId`      | `string` | **Required**. Automobile ID being used|
+| `reason`      | `string` | **Required**. Why the automobile is being used|
+
+#### Request Example:
+
+```json
+{
+	"startDate": "11/12/23",
+	"driverId": "02d542d5-cd94-421f-9ac2-0842fe8f855a",
+	"automobileId":"19a28d9c-9553-4c87-b208-53acaa05af0c",
+	"reason": "Merchandise transport"
+}
+````
+
+#### Response Example:
+
+
+```json
+{
+	"data": {
+		"ok": true,
+		"automobileUsage": {
+			"id": "9faa8905-1d50-4f03-8811-96e4e3b9b9b5",
+			"startDate": "11/12/23",
+			"driver": {
+				"id": "02d542d5-cd94-421f-9ac2-0842fe8f855a",
+				"name": "Paul"
+			},
+			"automobile": {
+				"id": "19a28d9c-9553-4c87-b208-53acaa05af0c",
+				"licensePlate": "AAA1A12",
+				"color": "Green",
+				"brand": "Toyota"
+			},
+			"reason": "Merchandise transport"
+		}
+	}
+}
+````
+
+### Update a usage 
+
+```http
+  PUT /usages/${id}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`      | `string` | **Required**. Id of the automobile usage |
+| `endDate`      | `string` | **Required**. Final usage date |
+
+
+#### Request Example:
+
+```json
+{
+	"endDate": "15/12/23"
+}
+````
+
+
+#### Response Example:
+
+
+```json
+{
+	"data": {
+		"ok": true,
+		"automobileUsage": {
+			"id": "356b270b-36db-415a-a809-88a9323605d2",
+			"startDate": "12/12/23",
+			"driver": {
+				"id": "d460736f-e98c-4d37-bb8c-75a0acd47a64",
+				"name": "John"
+			},
+			"automobile": {
+				"id": "2ef73fc1-f781-49b3-8943-7282b5984065",
+				"licensePlate": "AAA1A13",
+				"color": "Green",
+				"brand": "Toyota"
+			},
+			"reason": "Merchandise transport",
+			"endDate": "15/12/23"
+		}
+	}
+}
 ````
 ## License
 
