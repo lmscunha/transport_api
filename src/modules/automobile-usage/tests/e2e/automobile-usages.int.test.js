@@ -134,7 +134,35 @@ describe("usages Resource", () => {
       expect(res.statusCode).toBe(404);
       expect(res.body.message).toEqual("no-automobile-found");
     });
-  });
+
+    test("should not register bad input", async () => {
+      const auto1 = await request(app).post("/automobiles").send({
+        licensePlate: "BBA1A22",
+        brand: "Foo",
+        color: "Blue",
+      });
+
+      const driver1 = await request(app).post("/drivers").send({
+        name: "John Doe",
+      });
+
+      const res = await request(app).post("/usages").send({
+        startDate: "11/12/23",
+        driverId: driver1.body.data.driver.id,
+        automobileId: auto1.body.data.automobile.id,
+        reason: "Test",
+        foo: "Bad",
+      });
+
+      expect(res.statusCode).toBe(201);
+      expect(res.body.data.automobileUsage).toHaveProperty("id");
+      expect(res.body.data.automobileUsage).not.toHaveProperty("foo");
+      expect(res.body.data.automobileUsage.driver.name).toEqual("John Doe");
+      expect(res.body.data.automobileUsage.automobile.licensePlate).toEqual(
+        "BBA1A22",
+      );
+    });
+  })
 
   describe("PUT /usages", () => {
     test("should add automobile-usage endDate", async () => {
