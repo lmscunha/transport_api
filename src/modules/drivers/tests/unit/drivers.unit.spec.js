@@ -116,10 +116,10 @@ describe("DriverService", () => {
     test("should not register bad input", async () => {
       const result = await driverService.registerDriver({
         name: "John",
-        foo: "Bad"
+        foo: "Bad",
       });
 
-      expect(result.driver).not.toHaveProperty("foo")
+      expect(result.driver).not.toHaveProperty("foo");
     });
 
     test("should return {ok:false, why:invalid-driver-data} if all data is missing", async () => {
@@ -157,10 +157,10 @@ describe("DriverService", () => {
 
         const result = await driverService.updateDriver(driver.driver.id, {
           name: "Paul",
-          foo: "Bad"
+          foo: "Bad",
         });
 
-        expect(result.driver).not.toHaveProperty("foo")
+        expect(result.driver).not.toHaveProperty("foo");
       });
 
       test("should not update if there is no data to update", async () => {
