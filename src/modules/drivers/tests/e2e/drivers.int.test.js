@@ -5,14 +5,14 @@ describe("Drivers Resource", () => {
   describe("GET /drivers", () => {
     test("should list all drivers", async () => {
       const driverCreated1 = await request(app).post("/drivers").send({
-        name: "John"
+        name: "John",
       });
 
       const driverCreated2 = await request(app).post("/drivers").send({
-        name: "John2"
+        name: "John2",
       });
 
-      const res = await request(app).get('/drivers');
+      const res = await request(app).get("/drivers");
 
       expect(res.statusCode).toBe(200);
       expect(res.body.data.driver.length).toEqual(2);
@@ -26,14 +26,14 @@ describe("Drivers Resource", () => {
 
     test("should filter the driver by name", async () => {
       const driverCreated1 = await request(app).post("/drivers").send({
-        name: "John3"
+        name: "John3",
       });
 
       const driverCreated2 = await request(app).post("/drivers").send({
-        name: "John4"
+        name: "John4",
       });
 
-      const name = "John4"
+      const name = "John4";
       const res = await request(app).get(`/drivers?name=${name}`);
 
       expect(res.statusCode).toBe(200);
@@ -46,11 +46,11 @@ describe("Drivers Resource", () => {
 
     test("should get the driver by ID", async () => {
       const driverCreated1 = await request(app).post("/drivers").send({
-        name: "John4"
+        name: "John4",
       });
 
       const driverCreated2 = await request(app).post("/drivers").send({
-        name: "John5"
+        name: "John5",
       });
 
       const driverId = driverCreated2.body.data.driver.id;
@@ -65,7 +65,7 @@ describe("Drivers Resource", () => {
   describe("POST /drivers", () => {
     test("should register driver", async () => {
       const res = await request(app).post("/drivers").send({
-        name: "John6"
+        name: "John6",
       });
 
       expect(res.statusCode).toBe(201);
@@ -84,12 +84,12 @@ describe("Drivers Resource", () => {
   describe("PUT /drivers", () => {
     test("should update the driver name", async () => {
       const driverCreated = await request(app).post("/drivers").send({
-        name: "John7"
+        name: "John7",
       });
 
       const driverId = driverCreated.body.data.driver.id;
       const res = await request(app).put(`/drivers/${driverId}`).send({
-        name: "John8"
+        name: "John8",
       });
 
       expect(res.statusCode).toBe(200);
@@ -99,7 +99,7 @@ describe("Drivers Resource", () => {
 
     test("should not update the driver if no data is send", async () => {
       const driverCreated = await request(app).post("/drivers").send({
-        name: "John9"
+        name: "John9",
       });
 
       const driverId = driverCreated.body.data.driver.id;
@@ -113,7 +113,7 @@ describe("Drivers Resource", () => {
   describe("DELETE /drivers", () => {
     test("should remove the driver by ID", async () => {
       const driverCreated = await request(app).post("/drivers").send({
-        name: "John10"
+        name: "John10",
       });
 
       const driverId = driverCreated.body.data.driver.id;
@@ -124,7 +124,7 @@ describe("Drivers Resource", () => {
 
     test("should not featch a deleted driver", async () => {
       const driverCreated = await request(app).post("/drivers").send({
-        name: "John11"
+        name: "John11",
       });
 
       const driverId = driverCreated.body.data.driver.id;
