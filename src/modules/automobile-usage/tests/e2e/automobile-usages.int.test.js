@@ -221,5 +221,33 @@ describe("usages Resource", () => {
       expect(res.statusCode).toBe(403);
       expect(res.body.message).toEqual("no-invalid-end-date");
     });
+
+    test("should not update bad input", async () => {
+      const auto1 = await request(app).post("/automobiles").send({
+        licensePlate: "BAA1A25",
+        brand: "Foo",
+        color: "Blue",
+      });
+
+      const driver1 = await request(app).post("/drivers").send({
+        name: "John6",
+      });
+
+      const autoUsage = await request(app).post("/usages").send({
+        startDate: "11/12/23",
+        driverId: driver1.body.data.driver.id,
+        automobileId: auto1.body.data.automobile.id,
+        reason: "Test",
+      });
+
+      const res = await request(app)
+        .put(`/usages/${autoUsage.body.data.automobileUsage.id}`)
+        .send({
+          foo: "Bad",
+        });
+
+      expect(res.statusCode).toBe(403);
+      expect(res.body.message).toEqual("invalid-data-to-update");
+    });
   });
 });
