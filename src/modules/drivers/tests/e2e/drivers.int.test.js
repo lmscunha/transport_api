@@ -106,7 +106,7 @@ describe("Drivers Resource", () => {
       const res = await request(app).put(`/drivers/${driverId}`).send();
 
       expect(res.statusCode).toBe(403);
-      expect(res.body.message).toEqual("no-data-to-update");
+      expect(res.body.message).toEqual("invalid-data-to-update");
     });
   });
 

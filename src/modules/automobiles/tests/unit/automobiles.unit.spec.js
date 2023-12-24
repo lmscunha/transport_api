@@ -162,6 +162,16 @@ describe("AutomobileService", () => {
         },
       });
     });
+    test("should not register bad input", async () => {
+      const result = await automobileService.registerAutomobile({
+        licensePlate: "AAA1A11",
+        brand: "Foo",
+        color: "Blue",
+        foo: "Bad",
+      });
+
+      expect(result.automobile).not.toHaveProperty("foo");
+    });
 
     test("should return {ok:false, why:invalid-automobile-data} if all data is missing", async () => {
       const result = await automobileService.registerAutomobile({});
@@ -245,98 +255,116 @@ describe("AutomobileService", () => {
         status: 403,
       });
     });
+  });
 
-    describe("updateAutomobile", () => {
-      test("should update an automobile", async () => {
-        const auto = await automobileService.registerAutomobile({
-          licensePlate: "AAA1A11",
-          brand: "Foo",
-          color: "Blue",
-        });
-
-        const result = await automobileService.updateAutomobile(
-          auto.automobile.id,
-          {
-            color: "Red",
-          },
-        );
-
-        expect(result).toEqual({
-          ok: true,
-          automobile: {
-            id: auto.automobile.id,
-            licensePlate: "AAA1A11",
-            brand: "Foo",
-            color: "Red",
-          },
-        });
+  describe("updateAutomobile", () => {
+    test("should update an automobile", async () => {
+      const auto = await automobileService.registerAutomobile({
+        licensePlate: "AAA1A11",
+        brand: "Foo",
+        color: "Blue",
       });
 
-      test("should return {ok:false, why:no-data-to-update} if there is no data to update", async () => {
-        const auto = await automobileService.registerAutomobile({
-          licensePlate: "AAA1A11",
-          brand: "Foo",
-          color: "Blue",
-        });
-
-        const result = await automobileService.updateAutomobile(auto.id, {});
-
-        expect(result).toEqual({
-          ok: false,
-          why: "no-data-to-update",
-          status: 403,
-        });
-      });
-
-      test("should return {ok:false, why:no-automobile-found} if there is no automobile with that id", async () => {
-        await automobileService.registerAutomobile({
-          licensePlate: "AAA1A11",
-          brand: "Foo",
-          color: "Blue",
-        });
-
-        const result = await automobileService.updateAutomobile("123", {
+      const result = await automobileService.updateAutomobile(
+        auto.automobile.id,
+        {
           color: "Red",
-        });
+        },
+      );
 
-        expect(result).toEqual({
-          ok: false,
-          why: "no-automobile-found",
-          status: 404,
-        });
+      expect(result).toEqual({
+        ok: true,
+        automobile: {
+          id: auto.automobile.id,
+          licensePlate: "AAA1A11",
+          brand: "Foo",
+          color: "Red",
+        },
+      });
+    });
+
+    test("should not update if there is no data to update", async () => {
+      const auto = await automobileService.registerAutomobile({
+        licensePlate: "AAA1A11",
+        brand: "Foo",
+        color: "Blue",
       });
 
-      describe("deleteAutomobile", () => {
-        test("should delete an automobile", async () => {
-          const auto = await automobileService.registerAutomobile({
-            licensePlate: "AAA1A11",
-            brand: "Foo",
-            color: "Blue",
-          });
+      const result = await automobileService.updateAutomobile(auto.id, {});
 
-          const result = await automobileService.deleteAutomobile(
-            auto.automobile.id,
-          );
+      expect(result).toEqual({
+        ok: false,
+        why: "invalid-data-to-update",
+        status: 403,
+      });
+    });
 
-          expect(result).toBeUndefined();
-          expect(await repositoryFaker.getById(auto.id)).toBeUndefined();
-        });
+    test("should not update bad input", async () => {
+      const auto = await automobileService.registerAutomobile({
+        licensePlate: "AAA1A11",
+        brand: "Foo",
+        color: "Blue",
+      });
 
-        test("should return {ok:false, why:invalid-id} if there is no id", async () => {
-          await automobileService.registerAutomobile({
-            licensePlate: "AAA1A11",
-            brand: "Foo",
-            color: "Blue",
-          });
+      const result = await automobileService.updateAutomobile(
+        auto.automobile.id,
+        {
+          color: "Red",
+          foo: "Bad",
+        },
+      );
 
-          const result = await automobileService.deleteAutomobile();
+      expect(result.automobile).not.toHaveProperty("foo");
+    });
 
-          expect(result).toEqual({
-            ok: false,
-            why: "invalid-id",
-            status: 403,
-          });
-        });
+    test("should return {ok:false, why:no-automobile-found} if there is no automobile with that id", async () => {
+      await automobileService.registerAutomobile({
+        licensePlate: "AAA1A11",
+        brand: "Foo",
+        color: "Blue",
+      });
+
+      const result = await automobileService.updateAutomobile("123", {
+        color: "Red",
+      });
+
+      expect(result).toEqual({
+        ok: false,
+        why: "no-automobile-found",
+        status: 404,
+      });
+    });
+  });
+
+  describe("deleteAutomobile", () => {
+    test("should delete an automobile", async () => {
+      const auto = await automobileService.registerAutomobile({
+        licensePlate: "AAA1A11",
+        brand: "Foo",
+        color: "Blue",
+      });
+
+      const result = await automobileService.deleteAutomobile(
+        auto.automobile.id,
+      );
+
+      expect(result).toBeUndefined();
+      expect(await repositoryFaker.getById(auto.id)).toBeUndefined();
+    });
+
+    test("should return {ok:false, why:invalid-id} if there is no id", async () => {
+      await automobileService.registerAutomobile({
+        licensePlate: "AAA1A11",
+        brand: "Foo",
+        color: "Blue",
+      });
+
+      const result = await automobileService.deleteAutomobile();
+
+      expect(result).toEqual({
+        ok: false,
+        why: "invalid-id",
+        status: 403,
       });
     });
   });
