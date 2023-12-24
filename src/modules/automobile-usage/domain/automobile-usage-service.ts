@@ -25,6 +25,14 @@ export class AutomobileUsageService implements AutomobileUsageUseCases {
       return { ok: false, why: "invalid-automobile-usage-data", status: 403 };
     }
 
+    const dateValidator =
+      /\b(0?[1-9]|[12]\d|30|31)[^\w\d\r\n:](0?[1-9]|1[0-2])[^\w\d\r\n:](\d{4}|\d{2})\b/gm;
+    const isValidFormat = dateValidator.test(startDate);
+
+    if (!isValidFormat) {
+      return { ok: false, why: "invalid-date-format", status: 403 };
+    }
+
     const driver = await this.driverProvider.getById(driverId);
     if (!driver) {
       return {
@@ -70,8 +78,12 @@ export class AutomobileUsageService implements AutomobileUsageUseCases {
   ): Promise<ResultDTO> {
     const { endDate } = newData;
 
-    if (!endDate) {
-      return { ok: false, why: "invalid-data-to-update", status: 403 };
+    const dateValidator =
+      /\b(0?[1-9]|[12]\d|30|31)[^\w\d\r\n:](0?[1-9]|1[0-2])[^\w\d\r\n:](\d{4}|\d{2})\b/gm;
+    const isValidFormat = dateValidator.test(endDate);
+
+    if (!endDate || !isValidFormat) {
+      return { ok: false, why: "invalid-date-format", status: 403 };
     }
 
     const automobileUsage = await this.automobileUageProvider.update(id, {
@@ -89,7 +101,7 @@ export class AutomobileUsageService implements AutomobileUsageUseCases {
     if (automobileUsage === false) {
       return {
         ok: false,
-        why: "no-invalid-end-date",
+        why: "invalid-end-date",
         status: 403,
       };
     }
