@@ -50,9 +50,15 @@ Then you should see a message similar to:
 | `color` | `string` | **Optional**. Filter by colour |
 | `brand` | `string` | **Optional**. Filter by brand |
 
+#### Request Example:
+
+```json
+No body
+````
+
 #### Response Example:
 
-````
+```json
 {
 	"data": {
 		"ok": true,
@@ -84,9 +90,15 @@ Then you should see a message similar to:
 | :-------- | :------- | :-------------------------------- |
 | `id`      | `string` | **Required**. Id of the automobile |
 
+#### Request Example:
+
+```json
+No body
+````
+
 #### Response Example:
 
-````
+```json
 {
 	"data": {
 		"ok": true,
@@ -112,10 +124,20 @@ Then you should see a message similar to:
 | `color`      | `string` | **Required**. Automobile color |
 | `brand`      | `string` | **Required**. Automobile brand |
 
+#### Request Example:
+
+```json
+{
+	"licensePlate": "AAA1A12", // No space - needs to be unique
+	"color": "Green",
+	"brand": "Toyota"
+}
+````
+
 #### Response Example:
 
 
-````
+```json
 {
 	"data": {
 		"ok": true,
@@ -141,6 +163,15 @@ Then you should see a message similar to:
 | `licensePlate`      | `string` | **Optional**. Automobile license plate |
 | `color`      | `string` | **Optional**. Automobile color |
 | `brand`      | `string` | **Optional**. Automobile brand |
+
+#### Request Example:
+
+```json
+{
+	"color": "Yellow"
+}
+````
+
 
 #### Response Example:
 
@@ -169,11 +200,178 @@ Then you should see a message similar to:
 | :-------- | :------- | :-------------------------------- |
 | `id`      | `string` | **Required**. Id of the automobile |
 
+
+#### Request Example:
+
+```json
+No body
+````
+
 #### Response Example:
 
 
+```json
+No body - Status 204
 ````
+
+## Drivers
+### Get all drivers
+
+```http
+  GET /drivers?name=foo
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `name` | `string` | **Optional**. Filter by name |
+
+#### Request Example:
+
+```json
 No body
+````
+
+#### Response Example:
+
+```json
+{
+	"data": {
+		"ok": true,
+		"driver": [
+			{
+				"id": "608b4fb5-9eb3-46d5-bc22-d92fdc73a04e",
+				"name": "John"
+			},
+			{
+				"id": "1bd7d853-6b5e-45e0-8a92-2cba23c26287",
+				"name": "Paul"
+			}
+		]
+	}
+}
+````
+
+### Get a driver by ID
+
+```http
+  GET /drivers/${id}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`      | `string` | **Required**. Id of the driver |
+
+#### Request Example:
+
+```json
+No body
+````
+
+#### Response Example:
+
+```json
+{
+	"data": {
+		"ok": true,
+		"driver": {
+			"id": "608b4fb5-9eb3-46d5-bc22-d92fdc73a04e",
+			"name": "John"
+		}
+	}
+}
+````
+
+### Register a driver
+
+```http
+  POST /drivers
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `Name`      | `string` | **Required**. Driver name |
+
+#### Request Example:
+
+```json
+{
+	"name": "Paul"
+}
+````
+
+#### Response Example:
+
+
+```json
+{
+	"data": {
+		"ok": true,
+		"driver": {
+			"id": "1bd7d853-6b5e-45e0-8a92-2cba23c26287",
+			"name": "Paul"
+		}
+	}
+}
+````
+
+### Update a driver 
+
+```http
+  PUT /drivers/${id}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`      | `string` | **Required**. Id of the driver |
+| `name`      | `string` | **Required**. Driver new name |
+
+
+#### Request Example:
+
+```json
+{
+	"name": "George"
+}
+````
+
+
+#### Response Example:
+
+
+```json
+{
+	"data": {
+		"ok": true,
+		"driver": {
+			"id": "1bd7d853-6b5e-45e0-8a92-2cba23c26287",
+			"name": "George"
+		}
+	}
+}
+````
+
+### Delete a driver
+
+```http
+  DELETE /drivers/${id}
+```
+
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `id`      | `string` | **Required**. Id of the driver |
+
+
+#### Request Example:
+
+```json
+No body
+````
+
+#### Response Example:
+
+
+```json
+No body - Status 204
 ````
 ## License
 
