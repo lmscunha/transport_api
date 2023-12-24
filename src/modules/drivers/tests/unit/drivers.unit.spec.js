@@ -20,15 +20,15 @@ describe("DriverService", () => {
 
     test("should return driver John when filter by ones name", async () => {
       await driverService.registerDriver({
-        name: "Doe"
+        name: "Doe",
       });
 
       const driver = await driverService.registerDriver({
-        name: "John"
+        name: "John",
       });
 
       const result = await driverService.getAllDrivers({
-        name: "John"
+        name: "John",
       });
 
       expect(result).toEqual({
@@ -45,13 +45,12 @@ describe("DriverService", () => {
 
     test("should return all drivers if no filter is passed", async () => {
       await driverService.registerDriver({
-        name: "Doe"
+        name: "Doe",
       });
 
       await driverService.registerDriver({
-        name: "John"
+        name: "John",
       });
-
 
       const result = await driverService.getAllDrivers({});
 
@@ -62,32 +61,30 @@ describe("DriverService", () => {
   describe("getADriver", () => {
     test("should return a automobile by ID", async () => {
       await driverService.registerDriver({
-        name: "John"
+        name: "John",
       });
 
       const driver = await driverService.registerDriver({
-        name: "Doe"
+        name: "Doe",
       });
 
-      const result = await driverService.getADriver(
-        driver.driver.id,
-      );
+      const result = await driverService.getADriver(driver.driver.id);
       expect(result).toEqual({
         ok: true,
         driver: {
           id: driver.driver.id,
-          name: "Doe"
+          name: "Doe",
         },
       });
     });
 
     test("should return {ok:false, why:no-driver-found} if the id do not belong to any driver", async () => {
       await driverService.registerDriver({
-        name: "John"
+        name: "John",
       });
 
       await driverService.registerDriver({
-        name: "Doe"
+        name: "Doe",
       });
 
       const id = "123";
@@ -104,14 +101,14 @@ describe("DriverService", () => {
   describe("registerDriver", () => {
     test("should register a driver", async () => {
       const result = await driverService.registerDriver({
-        name: "John"
+        name: "John",
       });
 
       expect(result).toEqual({
         ok: true,
         driver: {
           id: result.driver.id,
-          name: "John"
+          name: "John",
         },
       });
     });
@@ -129,28 +126,25 @@ describe("DriverService", () => {
     describe("updateDriver", () => {
       test("should update a driver", async () => {
         const driver = await driverService.registerDriver({
-          name: "John"
+          name: "John",
         });
 
-        const result = await driverService.updateDriver(
-          driver.driver.id,
-          {
-            name: "Paul"
-          },
-        );
+        const result = await driverService.updateDriver(driver.driver.id, {
+          name: "Paul",
+        });
 
         expect(result).toEqual({
           ok: true,
           driver: {
             id: driver.driver.id,
-            name: "Paul"
+            name: "Paul",
           },
         });
       });
 
       test("should return {ok:false, why:no-data-to-update} if there is no data to update", async () => {
         const driver = await driverService.registerDriver({
-          name: "John"
+          name: "John",
         });
 
         const result = await driverService.updateDriver(driver.driver.id, {});
@@ -164,11 +158,11 @@ describe("DriverService", () => {
 
       test("should return {ok:false, why:no-driver-found} if there is no driver with that id", async () => {
         await driverService.registerDriver({
-          name: "John"
+          name: "John",
         });
 
         const result = await driverService.updateDriver(123, {
-          name: "Paul"
+          name: "Paul",
         });
 
         expect(result).toEqual({
@@ -181,20 +175,20 @@ describe("DriverService", () => {
       describe("deleteDriver", () => {
         test("should delete a driver", async () => {
           const driver = await driverService.registerDriver({
-            name: "John"
+            name: "John",
           });
 
-          const result = await driverService.deleteDriver(
-            driver.driver.id,
-          );
+          const result = await driverService.deleteDriver(driver.driver.id);
 
           expect(result).toBeUndefined();
-          expect(await repositoryFaker.getById(driver.driver.id)).toBeUndefined();
+          expect(
+            await repositoryFaker.getById(driver.driver.id),
+          ).toBeUndefined();
         });
 
         test("should return {ok:false, why:invalid-id} if there is no id", async () => {
           await driverService.registerDriver({
-            name: "John"
+            name: "John",
           });
 
           const result = await driverService.deleteDriver();
