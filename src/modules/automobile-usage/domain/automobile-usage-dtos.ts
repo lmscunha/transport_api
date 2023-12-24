@@ -26,5 +26,5 @@ export type ResultDTO = {
   ok: boolean;
   why?: string;
   status?: number;
-  automobileUsage?: AutomobileUsage | AutomobileUsage[];
+  automobileUsage?: AutomobileUsage | AutomobileUsage[] | boolean;
 };

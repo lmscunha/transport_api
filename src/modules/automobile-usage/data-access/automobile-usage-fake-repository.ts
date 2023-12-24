@@ -12,11 +12,6 @@ export class AutomobileUsageRepositoryFaker implements AutomobileUsageProvider {
     return automobileUsages;
   }
 
-  public async getById(id: string): Promise<AutomobileUsage> {
-    let autoUsage = db.filter((autoUsage) => autoUsage.id === id);
-    return autoUsage[0];
-  }
-
   public async isValidDriver(driverId: string): Promise<boolean> {
     let result = false;
     let isDriverUsingAnAuto = db.filter(
@@ -42,10 +37,14 @@ export class AutomobileUsageRepositoryFaker implements AutomobileUsageProvider {
     id: string,
     newData: UpdateDTO,
   ): Promise<AutomobileUsage | null> {
-    let automobileUsage: AutomobileUsage | null = null;
+    let automobileUsage: AutomobileUsage | null | boolean = null;
 
     db.forEach((autoUsage) => {
       if (autoUsage.id === id) {
+        if (newData.endDate < autoUsage.startDate) {
+          return (automobileUsage = false);
+        }
+
         autoUsage = Object.assign(autoUsage, newData);
         automobileUsage = autoUsage;
       }
