@@ -24,8 +24,8 @@ To run this project, you will need to add the following environment variables to
 Install the Transport API with npm
 
 ```bash
-  npm i 
   cd transport_api
+  npm i 
 ```
 To start the server in development mode, run the following cmd:
 ```bash
