@@ -72,34 +72,27 @@ export class AutomobileUsageService implements AutomobileUsageUseCases {
       return { ok: false, why: "no-data-to-update", status: 403 };
     }
 
-    const autoUsageCreated = await this.automobileUageProvider.getById(id);
-    if (!autoUsageCreated) {
-      return {
-        ok: false,
-        why: "no-automobile-usage-found",
-        status: 404,
-      };
-    }
-    if (autoUsageCreated.startDate > newData.endDate) {
-      return {
-        ok: false,
-        why: "no-invalid-end-update",
-        status: 403,
-      };
-    }
-
     const automobileUsage = await this.automobileUageProvider.update(
       id,
       newData,
     );
 
-    if (!automobileUsage) {
+    if (automobileUsage === null) {
       return {
         ok: false,
         why: "no-automobile-usage-found",
         status: 404,
       };
     }
+
+    if (automobileUsage === false) {
+      return {
+        ok: false,
+        why: "no-invalid-end-date",
+        status: 403,
+      };
+    }
+
     return { ok: true, automobileUsage };
   }
 }

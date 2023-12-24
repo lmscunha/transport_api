@@ -349,7 +349,7 @@ describe("AutomobileUsageService", () => {
 
       expect(result).toEqual({
         ok: false,
-        why: "no-invalid-end-update",
+        why: "no-invalid-end-date",
         status: 403,
       });
     });
