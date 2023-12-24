@@ -1,14 +1,24 @@
-const { AutomobileRepositoryFaker } = require("../../../automobiles/data-access/automobile-fake-repository");
-const { DriverRepositoryFaker } = require("../../../drivers/data-access/driver-fake-repository");
+const {
+  AutomobileRepositoryFaker,
+} = require("../../../automobiles/data-access/automobile-fake-repository");
+const {
+  DriverRepositoryFaker,
+} = require("../../../drivers/data-access/driver-fake-repository");
 const {
   AutomobileUsageRepositoryFaker,
 } = require("../../data-access/automobile-usage-fake-repository");
-const { AutomobileUsageService } = require("../../domain/automobile-usage-service");
+const {
+  AutomobileUsageService,
+} = require("../../domain/automobile-usage-service");
 
 const repositoryFaker = new AutomobileUsageRepositoryFaker();
-const automobileRepositoryFaker = new AutomobileRepositoryFaker()
-const driverRepositoryFaker = new DriverRepositoryFaker()
-const automobileUsageService = new AutomobileUsageService(repositoryFaker, automobileRepositoryFaker, driverRepositoryFaker);
+const automobileRepositoryFaker = new AutomobileRepositoryFaker();
+const driverRepositoryFaker = new DriverRepositoryFaker();
+const automobileUsageService = new AutomobileUsageService(
+  repositoryFaker,
+  automobileRepositoryFaker,
+  driverRepositoryFaker,
+);
 
 describe("AutomobileUsageService", () => {
   afterEach(async () => {
@@ -47,14 +57,14 @@ describe("AutomobileUsageService", () => {
         startDate: "11/12/23",
         driverId: driver.id,
         automobileId: automobile.id,
-        reason: "Test"
+        reason: "Test",
       });
 
       await automobileUsageService.registerAutomobileUsage({
         startDate: "12/12/23",
         driverId: driver2.id,
         automobileId: autombile2.id,
-        reason: "Test 2"
+        reason: "Test 2",
       });
 
       const result = await automobileUsageService.getAllAutomobileUsages({});
@@ -79,7 +89,7 @@ describe("AutomobileUsageService", () => {
         startDate: "11/12/23",
         driverId: driver.id,
         automobileId: automobile.id,
-        reason: "Test"
+        reason: "Test",
       });
 
       expect(result).toEqual({
@@ -88,7 +98,7 @@ describe("AutomobileUsageService", () => {
           startDate: "11/12/23",
           driver: {
             id: driver.id,
-            name: "John"
+            name: "John",
           },
           automobile: {
             id: automobile.id,
@@ -97,10 +107,10 @@ describe("AutomobileUsageService", () => {
             color: "Blue",
           },
           id: result.automobileUsage.id,
-          reason: "Test"
+          reason: "Test",
         },
       });
-    })
+    });
     test("should return {ok:false, why:invalid-automobile-usage-data} if all data is missing", async () => {
       const result = await automobileUsageService.registerAutomobileUsage({});
 
@@ -109,7 +119,7 @@ describe("AutomobileUsageService", () => {
         why: "invalid-automobile-usage-data",
         status: 403,
       });
-    })
+    });
 
     test("should return {ok:false, why:invalid-automobile-data} if the automobile is missing", async () => {
       const result = await automobileUsageService.registerAutomobileUsage({});
@@ -136,16 +146,15 @@ describe("AutomobileUsageService", () => {
         startDate: "11/12/23",
         driverId: driver.id,
         automobileId: automobile.id,
-        reason: "Test"
+        reason: "Test",
       });
 
       const result = await automobileUsageService.registerAutomobileUsage({
         startDate: "12/12/23",
         driverId: driver.id,
         automobileId: automobile.id,
-        reason: "Test 2"
+        reason: "Test 2",
       });
-
 
       expect(result).toEqual({
         ok: false,
@@ -169,18 +178,21 @@ describe("AutomobileUsageService", () => {
         startDate: "11/12/23",
         driverId: driver.id,
         automobileId: automobile.id,
-        reason: "Test"
+        reason: "Test",
       });
 
-      await automobileUsageService.updateAutomobileUsage(autoUsage.automobileUsage.id, {
-        endDate: "15/12/23",
-      });
+      await automobileUsageService.updateAutomobileUsage(
+        autoUsage.automobileUsage.id,
+        {
+          endDate: "15/12/23",
+        },
+      );
 
       const result = await automobileUsageService.registerAutomobileUsage({
         startDate: "16/12/23",
         driverId: driver.id,
         automobileId: automobile.id,
-        reason: "Test 2"
+        reason: "Test 2",
       });
 
       expect(result).toEqual({
@@ -189,7 +201,7 @@ describe("AutomobileUsageService", () => {
           startDate: "16/12/23",
           driver: {
             id: driver.id,
-            name: "John"
+            name: "John",
           },
           automobile: {
             id: automobile.id,
@@ -198,10 +210,10 @@ describe("AutomobileUsageService", () => {
             color: "Blue",
           },
           id: result.automobileUsage.id,
-          reason: "Test 2"
+          reason: "Test 2",
         },
       });
-    })
+    });
   });
 
   describe("updateDriver", () => {
@@ -220,12 +232,15 @@ describe("AutomobileUsageService", () => {
         startDate: "11/12/23",
         driverId: driver.id,
         automobileId: automobile.id,
-        reason: "Test"
+        reason: "Test",
       });
 
-      const result = await automobileUsageService.updateAutomobileUsage(autoUsage.automobileUsage.id, {
-        endDate: "15/12/23",
-      });
+      const result = await automobileUsageService.updateAutomobileUsage(
+        autoUsage.automobileUsage.id,
+        {
+          endDate: "15/12/23",
+        },
+      );
 
       expect(result).toEqual({
         ok: true,
@@ -235,7 +250,7 @@ describe("AutomobileUsageService", () => {
           id: result.automobileUsage.id,
           driver: {
             name: "John",
-            id: driver.id
+            id: driver.id,
           },
           automobile: {
             id: automobile.id,
@@ -243,7 +258,7 @@ describe("AutomobileUsageService", () => {
             brand: "Foo",
             color: "Blue",
           },
-          reason: "Test"
+          reason: "Test",
         },
       });
     });
@@ -263,10 +278,13 @@ describe("AutomobileUsageService", () => {
         startDate: "11/12/23",
         driverId: driver.id,
         automobileId: automobile.id,
-        reason: "Test"
+        reason: "Test",
       });
 
-      const result = await automobileUsageService.updateAutomobileUsage(autoUsage.automobileUsage.id, {});
+      const result = await automobileUsageService.updateAutomobileUsage(
+        autoUsage.automobileUsage.id,
+        {},
+      );
 
       expect(result).toEqual({
         ok: false,
@@ -290,7 +308,7 @@ describe("AutomobileUsageService", () => {
         startDate: "11/12/23",
         driverId: driver.id,
         automobileId: automobile.id,
-        reason: "Test"
+        reason: "Test",
       });
 
       const result = await automobileUsageService.updateAutomobileUsage(123, {
@@ -319,12 +337,15 @@ describe("AutomobileUsageService", () => {
         startDate: "11/12/23",
         driverId: driver.id,
         automobileId: automobile.id,
-        reason: "Test"
+        reason: "Test",
       });
 
-      const result = await automobileUsageService.updateAutomobileUsage(autoUsage.automobileUsage.id, {
-        endDate: "10/12/23",
-      });
+      const result = await automobileUsageService.updateAutomobileUsage(
+        autoUsage.automobileUsage.id,
+        {
+          endDate: "10/12/23",
+        },
+      );
 
       expect(result).toEqual({
         ok: false,
