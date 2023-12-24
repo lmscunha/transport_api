@@ -231,7 +231,7 @@ describe("AutomobileUsageService", () => {
         driverId: driver.id,
         automobileId: automobile.id,
         reason: "Test",
-        foo: "Bad input"
+        foo: "Bad input",
       });
 
       expect(result).toEqual({
