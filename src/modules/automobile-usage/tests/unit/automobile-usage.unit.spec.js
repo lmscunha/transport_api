@@ -111,6 +111,32 @@ describe("AutomobileUsageService", () => {
         },
       });
     });
+
+    test("should not register if date has invalid format", async () => {
+      const driver = await driverRepositoryFaker.save({
+        name: "John",
+      });
+
+      const automobile = await automobileRepositoryFaker.save({
+        licensePlate: "AAA1A11",
+        brand: "Foo",
+        color: "Blue",
+      });
+
+      const result = await automobileUsageService.registerAutomobileUsage({
+        startDate: "1111111",
+        driverId: driver.id,
+        automobileId: automobile.id,
+        reason: "Test",
+      });
+
+      expect(result).toEqual({
+        ok: false,
+        why: "invalid-date-format",
+        status: 403,
+      });
+    });
+
     test("should return {ok:false, why:invalid-automobile-usage-data} if all data is missing", async () => {
       const result = await automobileUsageService.registerAutomobileUsage({});
 
@@ -327,7 +353,7 @@ describe("AutomobileUsageService", () => {
 
       expect(result).toEqual({
         ok: false,
-        why: "invalid-data-to-update",
+        why: "invalid-date-format",
         status: 403,
       });
     });
@@ -388,7 +414,39 @@ describe("AutomobileUsageService", () => {
 
       expect(result).toEqual({
         ok: false,
-        why: "no-invalid-end-date",
+        why: "invalid-end-date",
+        status: 403,
+      });
+    });
+
+    test("should not update if date has invalid format", async () => {
+      const driver = await driverRepositoryFaker.save({
+        name: "John",
+      });
+
+      const automobile = await automobileRepositoryFaker.save({
+        licensePlate: "AAA1A11",
+        brand: "Foo",
+        color: "Blue",
+      });
+
+      const autoUsage = await automobileUsageService.registerAutomobileUsage({
+        startDate: "11/12/23",
+        driverId: driver.id,
+        automobileId: automobile.id,
+        reason: "Test",
+      });
+
+      const result = await automobileUsageService.updateAutomobileUsage(
+        autoUsage.automobileUsage.id,
+        {
+          endDate: "0000000",
+        },
+      );
+
+      expect(result).toEqual({
+        ok: false,
+        why: "invalid-date-format",
         status: 403,
       });
     });
@@ -420,7 +478,7 @@ describe("AutomobileUsageService", () => {
 
       expect(result).toEqual({
         ok: false,
-        why: "invalid-data-to-update",
+        why: "invalid-date-format",
         status: 403,
       });
     });

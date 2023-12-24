@@ -219,7 +219,7 @@ describe("usages Resource", () => {
         .send();
 
       expect(res.statusCode).toBe(403);
-      expect(res.body.message).toEqual("invalid-data-to-update");
+      expect(res.body.message).toEqual("invalid-date-format");
     });
 
     test("should not update the automobile-usage if the end date is less than the startDate", async () => {
@@ -247,7 +247,7 @@ describe("usages Resource", () => {
         });
 
       expect(res.statusCode).toBe(403);
-      expect(res.body.message).toEqual("no-invalid-end-date");
+      expect(res.body.message).toEqual("invalid-end-date");
     });
 
     test("should not update bad input", async () => {
@@ -275,7 +275,7 @@ describe("usages Resource", () => {
         });
 
       expect(res.statusCode).toBe(403);
-      expect(res.body.message).toEqual("invalid-data-to-update");
+      expect(res.body.message).toEqual("invalid-date-format");
     });
   });
 });
