@@ -1,7 +1,7 @@
 import { AutomobileUseCases } from "./automobile-use-cases";
 import { Automobile } from "./AutomobileModel";
 import { AutomobileProvider } from "./automobile-protocols";
-import { ResultDTO, FilterDTO, InputDTO } from "./automobile-dtos";
+import { ResultDTO, FilterDTO, InputDTO, StorageDTO } from "./automobile-dtos";
 
 export class AutomobileService implements AutomobileUseCases {
   constructor(public readonly automobileProvider: AutomobileProvider) {}
@@ -61,11 +61,25 @@ export class AutomobileService implements AutomobileUseCases {
     id: string,
     newData: InputDTO,
   ): Promise<ResultDTO> {
-    if (Object.keys(newData).length < 1) {
-      return { ok: false, why: "no-data-to-update", status: 403 };
+    const { color, brand, licensePlate } = newData;
+    if (!color && !brand && !licensePlate) {
+      return { ok: false, why: "invalid-data-to-update", status: 403 };
     }
 
-    const automobile = await this.automobileProvider.update(id, newData);
+    type validKey = keyof StorageDTO;
+    const validInput: validKey[] = ["brand", "color", "licensePlate"];
+    let newParsedData: InputDTO = {};
+
+    for (const key in newData) {
+      if (
+        newData[key as keyof Automobile] &&
+        validInput.includes(key as keyof StorageDTO)
+      ) {
+        newParsedData[key as keyof InputDTO] = newData[key as keyof InputDTO];
+      }
+    }
+
+    const automobile = await this.automobileProvider.update(id, newParsedData);
     if (!automobile) {
       return {
         ok: false,
