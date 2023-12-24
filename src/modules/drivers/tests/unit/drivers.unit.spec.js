@@ -113,6 +113,15 @@ describe("DriverService", () => {
       });
     });
 
+    test("should not register bad input", async () => {
+      const result = await driverService.registerDriver({
+        name: "John",
+        foo: "Bad"
+      });
+
+      expect(result.driver).not.toHaveProperty("foo")
+    });
+
     test("should return {ok:false, why:invalid-driver-data} if all data is missing", async () => {
       const result = await driverService.registerDriver({});
 
@@ -141,8 +150,20 @@ describe("DriverService", () => {
           },
         });
       });
+      test("should not update bad input", async () => {
+        const driver = await driverService.registerDriver({
+          name: "John",
+        });
 
-      test("should return {ok:false, why:no-data-to-update} if there is no data to update", async () => {
+        const result = await driverService.updateDriver(driver.driver.id, {
+          name: "Paul",
+          foo: "Bad"
+        });
+
+        expect(result.driver).not.toHaveProperty("foo")
+      });
+
+      test("should not update if there is no data to update", async () => {
         const driver = await driverService.registerDriver({
           name: "John",
         });
@@ -151,7 +172,7 @@ describe("DriverService", () => {
 
         expect(result).toEqual({
           ok: false,
-          why: "no-data-to-update",
+          why: "invalid-data-to-update",
           status: 403,
         });
       });

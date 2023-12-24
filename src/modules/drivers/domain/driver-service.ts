@@ -44,11 +44,13 @@ export class DriverService implements DriverUseCases {
   }
 
   public async updateDriver(id: string, newData: InputDTO): Promise<ResultDTO> {
-    if (Object.keys(newData).length < 1) {
-      return { ok: false, why: "no-data-to-update", status: 403 };
+    const { name } = newData;
+
+    if (!name) {
+      return { ok: false, why: "invalid-data-to-update", status: 403 };
     }
 
-    const driver = await this.driverProvider.update(id, newData);
+    const driver = await this.driverProvider.update(id, { name });
     if (!driver) {
       return {
         ok: false,
