@@ -40,7 +40,6 @@ describe("usages Resource", () => {
 
       const res = await request(app).get("/usages");
 
-
       expect(res.statusCode).toBe(200);
       expect(res.body.data.automobileUsage.length).toEqual(2);
       expect(res.body.data.automobileUsage[0].automobile.id).toEqual(
@@ -56,7 +55,6 @@ describe("usages Resource", () => {
         driver2.body.data.driver.id,
       );
     });
-
   });
 
   describe("POST /usages", () => {
@@ -81,7 +79,9 @@ describe("usages Resource", () => {
       expect(res.statusCode).toBe(201);
       expect(res.body.data.automobileUsage).toHaveProperty("id");
       expect(res.body.data.automobileUsage.driver.name).toEqual("John");
-      expect(res.body.data.automobileUsage.automobile.licensePlate).toEqual("BAA1A11");
+      expect(res.body.data.automobileUsage.automobile.licensePlate).toEqual(
+        "BAA1A11",
+      );
     });
 
     test("should not register the automobile-usage if no data is send", async () => {
@@ -119,7 +119,6 @@ describe("usages Resource", () => {
       expect(res.body.message).toEqual("no-driver-found");
     });
 
-
     test("should not register the automobile-usage if the automobile was not registered", async () => {
       const driver1 = await request(app).post("/drivers").send({
         name: "John5",
@@ -156,12 +155,16 @@ describe("usages Resource", () => {
         reason: "Test",
       });
 
-      const res = await request(app).put(`/usages/${autoUsage.body.data.automobileUsage.id}`).send({
-        endDate: "16/12/23",
-      });
+      const res = await request(app)
+        .put(`/usages/${autoUsage.body.data.automobileUsage.id}`)
+        .send({
+          endDate: "16/12/23",
+        });
 
       expect(res.statusCode).toBe(200);
-      expect(res.body.data.automobileUsage.id).toEqual(autoUsage.body.data.automobileUsage.id);
+      expect(res.body.data.automobileUsage.id).toEqual(
+        autoUsage.body.data.automobileUsage.id,
+      );
       expect(res.body.data.automobileUsage.endDate).toEqual("16/12/23");
     });
 
@@ -183,7 +186,9 @@ describe("usages Resource", () => {
         reason: "Test",
       });
 
-      const res = await request(app).put(`/usages/${autoUsage.body.data.automobileUsage.id}`).send();
+      const res = await request(app)
+        .put(`/usages/${autoUsage.body.data.automobileUsage.id}`)
+        .send();
 
       expect(res.statusCode).toBe(403);
       expect(res.body.message).toEqual("no-data-to-update");
@@ -207,9 +212,11 @@ describe("usages Resource", () => {
         reason: "Test",
       });
 
-      const res = await request(app).put(`/usages/${autoUsage.body.data.automobileUsage.id}`).send({
-        endDate: "10/12/23",
-      });
+      const res = await request(app)
+        .put(`/usages/${autoUsage.body.data.automobileUsage.id}`)
+        .send({
+          endDate: "10/12/23",
+        });
 
       expect(res.statusCode).toBe(403);
       expect(res.body.message).toEqual("no-invalid-end-date");
